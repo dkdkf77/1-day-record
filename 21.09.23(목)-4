@@ -1,0 +1,112 @@
+## 05. Component (3)
+
+- 11) 클래스형 Component
+
+    이번엔 함수형 컴포넌트를 클래스형 컴포넌트로 바꿔볼게요!
+    App.js를 클래스형으로 바꾸고, BucketList 컴포넌트에 데이터를 넘겨줘 봅시다!
+
+    - App.js를 클래스형으로 바꿔봅시다.
+
+        아래 코드를 App.js에 붙여 넣고 브라우저에서 함수형일 때와 동일하게 동작하는 걸 확인해봅시다.
+
+        - **[코드스니펫] - 클래스형 컴포넌트**
+
+            ```jsx
+            import React from 'react';
+            import logo from './logo.svg';
+            import './App.css';
+            // BucketList 컴포넌트를 import 해옵니다.
+            // import [컴포넌트 명] from [컴포넌트가 있는 파일경로];
+            import BucketList from './BucketList';
+
+            // 클래스형 컴포넌트는 이렇게 생겼습니다!
+            class App extends React.Component {
+
+              constructor(props){
+                super(props);
+                // App 컴포넌트의 state를 정의해줍니다.
+                this.state = {
+                  list: ['영화관 가기', '매일 책읽기', '수영 배우기'],
+                };
+              }
+
+              // 랜더 함수 안에 리액트 엘리먼트를 넣어줍니다!
+              render() {
+                  return (
+                  <div className="App">
+                    <h1>내 버킷리스트</h1>
+                    {/* 컴포넌트를 넣어줍니다. */}
+                    <BucketList/>
+                  </div>
+                );
+              }
+            }
+
+            export default App;
+            ```
+
+- 12) Component에서 Component로 데이터를 넘겨주자!
+
+    App 컴포넌트가 가지고 있는 state를 BucketList에 넘겨줍니다.
+
+    - state 값 사용하기
+
+        아래와 같이 입력해보고 콘솔을 확인해봅시다.
+
+        ```jsx
+        render() {
+            console.log(this.state);
+            ...
+        }
+        ```
+
+        ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/902c74a8-0d21-4a6f-97a4-e380113c760f/_2020-10-05__7.43.52.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/902c74a8-0d21-4a6f-97a4-e380113c760f/_2020-10-05__7.43.52.png)
+
+        **알면 덜 찜찜해지는, 몰라도 되는 이야기 :**
+        this 키워드는 깊이 들어가면 **context 객체**라고 부르는 친구와 연관이 있어요. 
+        우리는 함수나 클래스 안에서 사용하면 this를 쓴 위치(위의 경우에는 App 클래스)에 있는 값을 가지고 온다고 생각합시다.
+        ex) App 클래스 안에서 쓰면, this.[변수명]은 App 클래스 안에 있는 값을 가지고 옵니다.
+
+    - App 컴포넌트에서 BucketList 컴포넌트로 state를 넘겨주자
+
+        컴포넌트에 props를 넘겨줄 때는 아래와 같이 넘겨줍니다.
+
+        ```jsx
+        render() {
+            // this 키워드를 통해 state에 접근할 수 있어요.
+            console.log(this.state);
+
+              return (
+              <div className="App">
+                <h1>내 버킷리스트</h1>
+                {/* 컴포넌트를 넣어줍니다. */}
+                {/* <컴포넌트 명 [props 명]={넘겨줄 것(리스트, 문자열, 숫자, ...)}/> */}
+                <BucketList list={this.state.list}/>
+              </div>
+            );
+          }
+        ```
+
+        잘 넘어갔는 지 확인해볼까요?
+
+        BucketList.js 파일을 열고, 아래와 같이 입력합니다.
+
+        ```jsx
+        const BucketList = (props) => {
+            
+            console.log(props);
+
+            // 컴포넌트가 뿌려줄 ui 요소(리엑트 엘리먼트라고 불러요.)를 반환해줍니다.
+            return (
+                <div>
+                    버킷 리스트
+                </div>
+            );
+        }
+        ```
+
+        이제 브라우저를 열어 콘솔에 찍히는 지 확인해봅시다.
+
+        좋아요! 이제 App에서 BucketList로 데이터를 전달해줬네요! 🙂
+
+        ![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/39c062fa-c28d-43c7-a63b-33e90d737845/_2020-10-05__7.54.00.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/39c062fa-c28d-43c7-a63b-33e90d737845/_2020-10-05__7.54.00.png)
